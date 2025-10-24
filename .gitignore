@@ -54,5 +54,8 @@ rsconnect/
 # Data directory
 data
 
+# HTML files
+*.html
+
 # All files within archive folders
 **/archive/
