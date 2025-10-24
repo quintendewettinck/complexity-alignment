@@ -2645,8 +2645,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci10,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code,  
@@ -2657,8 +2657,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci90,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code, 
@@ -2699,8 +2699,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi10,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi10,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code,  
@@ -2711,8 +2711,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi90,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi90,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code, 
@@ -2753,8 +2753,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi10,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi10,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code,  
@@ -2765,8 +2765,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi90,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi90,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code, 
@@ -2815,8 +2815,8 @@ summary(mC_2_tpi_LML)
         data.frame(
           pci_p_lag      = seq(.$pci_min, .$pci_max, length.out = 100),
           dens_cp_lag    = .$dens10,
-          spi_p_lag = .$spi_med,
-          epi_p_lag = .$epi_med,
+          spi_p_lag      = .$spi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -2827,8 +2827,8 @@ summary(mC_2_tpi_LML)
         data.frame(
           pci_p_lag      = seq(.$pci_min, .$pci_max, length.out = 100),
           dens_cp_lag    = .$dens90,
-          spi_p_lag = .$spi_med,
-          epi_p_lag = .$epi_med,
+          spi_p_lag      = .$spi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code, 
@@ -2867,10 +2867,10 @@ summary(mC_2_tpi_LML)
       ) %>%
       { bind_rows(
         data.frame(
-          spi_p_lag = seq(.$spi_min, .$spi_max, length.out = 100),
+          spi_p_lag      = seq(.$spi_min, .$spi_max, length.out = 100),
           dens_cp_lag    = .$dens10,
           pci_p_lag      = .$pci_med,
-          epi_p_lag = .$epi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -2879,10 +2879,10 @@ summary(mC_2_tpi_LML)
                                    percentile_low * 100)
         ),
         data.frame(
-          spi_p_lag = seq(.$spi_min, .$spi_max, length.out = 100),
+          spi_p_lag      = seq(.$spi_min, .$spi_max, length.out = 100),
           dens_cp_lag    = .$dens90,
           pci_p_lag      = .$pci_med,
-          epi_p_lag = .$epi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code, 
@@ -2921,10 +2921,10 @@ summary(mC_2_tpi_LML)
       ) %>%
       { bind_rows(
         data.frame(
-          epi_p_lag = seq(.$epi_min, .$epi_max, length.out = 100),
+          epi_p_lag      = seq(.$epi_min, .$epi_max, length.out = 100),
           dens_cp_lag    = .$dens10,
           pci_p_lag      = .$pci_med,
-          spi_p_lag = .$spi_med,
+          spi_p_lag      = .$spi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -2933,10 +2933,10 @@ summary(mC_2_tpi_LML)
                                    percentile_low * 100)
         ),
         data.frame(
-          epi_p_lag = seq(.$epi_min, .$epi_max, length.out = 100),
+          epi_p_lag      = seq(.$epi_min, .$epi_max, length.out = 100),
           dens_cp_lag    = .$dens90,
           pci_p_lag      = .$pci_med,
-          spi_p_lag = .$spi_med,
+          spi_p_lag      = .$spi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -3336,8 +3336,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci10,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code,  
@@ -3348,8 +3348,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci90,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code, 
@@ -3391,8 +3391,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi10,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi10,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code,  
@@ -3403,8 +3403,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi90,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi90,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code, 
@@ -3446,8 +3446,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi10,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi10,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code,  
@@ -3458,8 +3458,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi90,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi90,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code, 
@@ -3502,8 +3502,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci10,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code,  
@@ -3514,8 +3514,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci90,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code, 
@@ -3557,8 +3557,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi10,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi10,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code,  
@@ -3569,8 +3569,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi90,
-            epi_p_lag = .$epi_med,
+            spi_p_lag      = .$spi90,
+            epi_p_lag      = .$epi_med,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code, 
@@ -3612,8 +3612,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi10,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi10,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code,  
@@ -3624,8 +3624,8 @@ summary(mC_2_tpi_LML)
           data.frame(
             dens_cp_lag    = seq(.$dens_min, .$dens_max, length.out = 100),
             pci_p_lag      = .$pci_med,
-            spi_p_lag = .$spi_med,
-            epi_p_lag = .$epi90,
+            spi_p_lag      = .$spi_med,
+            epi_p_lag      = .$epi90,
             log_RCA_cp_lag = .$rca_med,
             country_iso3   = .$country_iso3,
             prod_code      = .$prod_code, 
@@ -3676,8 +3676,8 @@ summary(mC_2_tpi_LML)
         data.frame(
           pci_p_lag      = seq(.$pci_min, .$pci_max, length.out = 100),
           dens_cp_lag    = .$dens10,
-          spi_p_lag = .$spi_med,
-          epi_p_lag = .$epi_med,
+          spi_p_lag      = .$spi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -3688,8 +3688,8 @@ summary(mC_2_tpi_LML)
         data.frame(
           pci_p_lag      = seq(.$pci_min, .$pci_max, length.out = 100),
           dens_cp_lag    = .$dens90,
-          spi_p_lag = .$spi_med,
-          epi_p_lag = .$epi_med,
+          spi_p_lag      = .$spi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code, 
@@ -3729,10 +3729,10 @@ summary(mC_2_tpi_LML)
       ) %>%
       { bind_rows(
         data.frame(
-          spi_p_lag = seq(.$spi_min, .$spi_max, length.out = 100),
+          spi_p_lag      = seq(.$spi_min, .$spi_max, length.out = 100),
           dens_cp_lag    = .$dens10,
           pci_p_lag      = .$pci_med,
-          epi_p_lag = .$epi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -3741,10 +3741,10 @@ summary(mC_2_tpi_LML)
                                    percentile_low * 100)
         ),
         data.frame(
-          spi_p_lag = seq(.$spi_min, .$spi_max, length.out = 100),
+          spi_p_lag      = seq(.$spi_min, .$spi_max, length.out = 100),
           dens_cp_lag    = .$dens90,
           pci_p_lag      = .$pci_med,
-          epi_p_lag = .$epi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code, 
@@ -3784,10 +3784,10 @@ summary(mC_2_tpi_LML)
       ) %>%
       { bind_rows(
         data.frame(
-          epi_p_lag = seq(.$epi_min, .$epi_max, length.out = 100),
+          epi_p_lag      = seq(.$epi_min, .$epi_max, length.out = 100),
           dens_cp_lag    = .$dens10,
           pci_p_lag      = .$pci_med,
-          spi_p_lag = .$spi_med,
+          spi_p_lag      = .$spi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -3796,10 +3796,10 @@ summary(mC_2_tpi_LML)
                                    percentile_low * 100)
         ),
         data.frame(
-          epi_p_lag = seq(.$epi_min, .$epi_max, length.out = 100),
+          epi_p_lag      = seq(.$epi_min, .$epi_max, length.out = 100),
           dens_cp_lag    = .$dens90,
           pci_p_lag      = .$pci_med,
-          spi_p_lag = .$spi_med,
+          spi_p_lag      = .$spi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -3842,8 +3842,8 @@ summary(mC_2_tpi_LML)
         data.frame(
           pci_p_lag      = seq(.$pci_min, .$pci_max, length.out = 100),
           dens_cp_lag    = .$dens10,
-          spi_p_lag = .$spi_med,
-          epi_p_lag = .$epi_med,
+          spi_p_lag      = .$spi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -3854,8 +3854,8 @@ summary(mC_2_tpi_LML)
         data.frame(
           pci_p_lag      = seq(.$pci_min, .$pci_max, length.out = 100),
           dens_cp_lag    = .$dens90,
-          spi_p_lag = .$spi_med,
-          epi_p_lag = .$epi_med,
+          spi_p_lag      = .$spi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code, 
@@ -3895,10 +3895,10 @@ summary(mC_2_tpi_LML)
       ) %>%
       { bind_rows(
         data.frame(
-          spi_p_lag = seq(.$spi_min, .$spi_max, length.out = 100),
+          spi_p_lag      = seq(.$spi_min, .$spi_max, length.out = 100),
           dens_cp_lag    = .$dens10,
           pci_p_lag      = .$pci_med,
-          epi_p_lag = .$epi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -3907,10 +3907,10 @@ summary(mC_2_tpi_LML)
                                    percentile_low * 100)
         ),
         data.frame(
-          spi_p_lag = seq(.$spi_min, .$spi_max, length.out = 100),
+          spi_p_lag      = seq(.$spi_min, .$spi_max, length.out = 100),
           dens_cp_lag    = .$dens90,
           pci_p_lag      = .$pci_med,
-          epi_p_lag = .$epi_med,
+          epi_p_lag      = .$epi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code, 
@@ -3950,10 +3950,10 @@ summary(mC_2_tpi_LML)
       ) %>%
       { bind_rows(
         data.frame(
-          epi_p_lag = seq(.$epi_min, .$epi_max, length.out = 100),
+          epi_p_lag      = seq(.$epi_min, .$epi_max, length.out = 100),
           dens_cp_lag    = .$dens10,
           pci_p_lag      = .$pci_med,
-          spi_p_lag = .$spi_med,
+          spi_p_lag      = .$spi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
@@ -3962,10 +3962,10 @@ summary(mC_2_tpi_LML)
                                    percentile_low * 100)
         ),
         data.frame(
-          epi_p_lag = seq(.$epi_min, .$epi_max, length.out = 100),
+          epi_p_lag      = seq(.$epi_min, .$epi_max, length.out = 100),
           dens_cp_lag    = .$dens90,
           pci_p_lag      = .$pci_med,
-          spi_p_lag = .$spi_med,
+          spi_p_lag      = .$spi_med,
           log_RCA_cp_lag = .$rca_med,
           country_iso3   = .$country_iso3,
           prod_code      = .$prod_code,  
