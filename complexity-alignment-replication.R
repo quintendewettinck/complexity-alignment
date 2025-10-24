@@ -42,7 +42,7 @@ cp_df[, cp_id := interaction(country_iso3, prod_code, drop = TRUE)]
 new_M_cp_year_window <- 3L # m = 3 = window length
 
 # RESULTS WITH ORTHOGONALISING PSPI & PEPI --------------------------------
-{ # ⚙️ Common params ####
+{ # Common params ####
   
   use_common_FE <- TRUE # if TRUE, then the individually specified FE in the 
   # model calls are replaced by the ones in common_fixed_effects
@@ -52,7 +52,7 @@ new_M_cp_year_window <- 3L # m = 3 = window length
     0 ), collapse = " + ")
 }
 
-{ # ⚠️ mc_0_tpi_ALL -----------------------------------------------
+{ # mc_0_tpi_ALL -----------------------------------------------
   predictors <- paste(c(
     "dens_cp_lag", 
     "log_RCA_cp_lag",
@@ -130,7 +130,7 @@ new_M_cp_year_window <- 3L # m = 3 = window length
   print(summary(mc_0_tpi_ALL))
 }
 
-{ # ⚠️ mC_1_tpi_ALL -----------------------------------------------
+{ # mC_1_tpi_ALL -----------------------------------------------
   predictors <- paste(c(
     "dens_cp_lag", 
     "log_RCA_cp_lag",
@@ -209,7 +209,7 @@ new_M_cp_year_window <- 3L # m = 3 = window length
   print(summary(mC_1_tpi_ALL))
 }
 
-{ # ⚠️ mC_2_tpi_ALL -----------------------------------------------
+{ # mC_2_tpi_ALL -----------------------------------------------
   predictors <- paste(c(
     "dens_cp_lag", 
     "log_RCA_cp_lag",
@@ -724,7 +724,7 @@ new_M_cp_year_window <- 3L # m = 3 = window length
   )
 }
 
-{ # ⚠️ mC_2_tpi_HUM -----------------------------------------------
+{ # mC_2_tpi_HUM -----------------------------------------------
   predictors <- paste(c(
     "dens_cp_lag", 
     "log_RCA_cp_lag",
@@ -896,7 +896,7 @@ new_M_cp_year_window <- 3L # m = 3 = window length
     plt_theme_2
 }
 
-{ # ⚠️ mC_2_tpi_LML -----------------------------------------------
+{ # mC_2_tpi_LML -----------------------------------------------
   predictors <- paste(c(
     "dens_cp_lag", 
     "log_RCA_cp_lag",
@@ -1845,7 +1845,7 @@ summary(mC_2_tpi_LML)
   }
 }
 
-{ # ➡️ Export results ----------------------------------------------------------
+{ # Export results ----------------------------------------------------------
   
   coef_digits <- 3 # nr of digits for the exported coefficients
   
@@ -2359,7 +2359,7 @@ summary(mC_2_tpi_LML)
 }
 
 # RESULTS WITHOUT ORTHOGONALISING PSPI & PEPI -----------------------------
-{ # ⚙️ Common params ####
+{ # Common params ####
   
   use_common_FE <- TRUE # if TRUE, then the individually specified FE in the 
   # model calls are replaced by the ones in common_fixed_effects
@@ -2369,7 +2369,7 @@ summary(mC_2_tpi_LML)
     0 ), collapse = " + ")
 }
 
-{ # ⚠️ mC_1_tpi_ALL -----------------------------------------------
+{ # mC_1_tpi_ALL -----------------------------------------------
   predictors <- paste(c(
     "dens_cp_lag", 
     "log_RCA_cp_lag",
@@ -2448,7 +2448,7 @@ summary(mC_2_tpi_LML)
   print(summary(mC_1_tpi_ALL))
 }
 
-{ # ⚠️ mC_2_tpi_ALL -----------------------------------------------
+{ # mC_2_tpi_ALL -----------------------------------------------
   predictors <- paste(c(
     "dens_cp_lag", 
     "log_RCA_cp_lag",
@@ -2963,7 +2963,7 @@ summary(mC_2_tpi_LML)
   )
 }
 
-{ # ⚠️ mC_2_tpi_HUM -----------------------------------------------
+{ # mC_2_tpi_HUM -----------------------------------------------
   predictors <- paste(c(
     "dens_cp_lag", 
     "log_RCA_cp_lag",
@@ -3135,7 +3135,7 @@ summary(mC_2_tpi_LML)
     plt_theme_2
 }
 
-{ # ⚠️ mC_2_tpi_LML -----------------------------------------------
+{ # mC_2_tpi_LML -----------------------------------------------
   predictors <- paste(c(
     "dens_cp_lag", 
     "log_RCA_cp_lag",
@@ -4079,7 +4079,7 @@ summary(mC_2_tpi_LML)
   }
 }
 
-{ # ➡️ Export results ----------------------------------------------------------
+{ # Export results ----------------------------------------------------------
   coef_digits # set in logistic_persistent.R
   
   { ## Additional fit stats ####
