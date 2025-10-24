@@ -15,7 +15,7 @@ library(plm)
 library(readr)
 library(data.table)
 library(rlang) 
-library(fst)
+library(arrow)
 library(glue)
 library(car)
 library(precrec)
@@ -24,8 +24,8 @@ library(gridExtra)
 library(kableExtra)
 
 # Import data -------------------------------------------------------------
-cp_df <- read_fst(file.path("data", "data_raw", "cp_df_external.fst"), 
-                  as.data.table = TRUE)
+cp_df <- read_parquet(file.path("data", "data_raw", "cp_df_external.parquet"), 
+                      as_data_frame = TRUE)
 
 head(cp_df)
 
