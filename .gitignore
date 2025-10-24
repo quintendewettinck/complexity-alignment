@@ -53,3 +53,6 @@ rsconnect/
 
 # Data directory
 data
+
+# All files within archive folders
+**/archive/

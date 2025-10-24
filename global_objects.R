@@ -77,3 +77,24 @@ export_latex_variable <- function(variable, value, path = latex_vars_path) {
     )
   }
 }
+
+
+# Plotting ----------------------------------------------------------------
+FONTSIZE_SMALL <- 10
+FONTSIZE_MED <- 12
+FONTSIZE_LARGE <- 14
+FONTSIZE_CAPTION <- 16
+FONTSIZE_LATEX_TABLE <- "footnotesize"
+FONT_FAMILY <- "Times"
+
+plt_theme_2 <- theme(
+  text = element_text(family = FONT_FAMILY),
+  plot.title = element_text(face = "plain", size = FONTSIZE_LARGE),
+  axis.title = element_text(face = "plain", size = FONTSIZE_LARGE),
+  axis.text = element_text(size = FONTSIZE_SMALL),
+  legend.direction = "vertical", 
+  legend.position = "right", 
+  legend.title = element_text(face = "plain", size = FONTSIZE_LARGE),
+  legend.text = element_text(size = FONTSIZE_MED), 
+  strip.text = element_text(size = FONTSIZE_LARGE)
+)

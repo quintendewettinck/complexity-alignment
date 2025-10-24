@@ -41,26 +41,6 @@ cp_df[, cp_id := interaction(country_iso3, prod_code, drop = TRUE)]
 
 new_M_cp_year_window <- 3L # m = 3 = window length
 
-FONTSIZE_SMALL <- 10
-FONTSIZE_MED <- 12
-FONTSIZE_LARGE <- 14
-FONTSIZE_CAPTION <- 16
-FONTSIZE_LATEX_TABLE <- "footnotesize"
-FONT_FAMILY <- "Times"
-
-plt_theme_2 <- theme(
-  text = element_text(family = FONT_FAMILY),
-  plot.title = element_text(face = "plain", size = FONTSIZE_LARGE),
-  axis.title = element_text(face = "plain", size = FONTSIZE_LARGE),
-  axis.text = element_text(size = FONTSIZE_SMALL),
-  legend.direction = "vertical", 
-  legend.position = "right", 
-  legend.title = element_text(face = "plain", size = FONTSIZE_LARGE),
-  legend.text = element_text(size = FONTSIZE_MED), 
-  strip.text = element_text(size = FONTSIZE_LARGE)
-)
-
-
 # RESULTS WITH ORTHOGONALISING PSPI & PEPI --------------------------------
 { # ⚙️ Common params ####
   
@@ -68,58 +48,22 @@ plt_theme_2 <- theme(
   # model calls are replaced by the ones in common_fixed_effects
   
   common_fixed_effects <- paste(c(
-    # "year",
-    # "country_iso3",
-    # "prod_code",
-    # "prod_code^year",
-    # "country_iso3^prod_code",
     "country_iso3^year",
     0 ), collapse = " + ")
 }
 
 { # ⚠️ mc_0_tpi_ALL -----------------------------------------------
-  # PSPI and PEPI, NO PCI
-  # This model adds both SPI and EPI in one model
   predictors <- paste(c(
     "dens_cp_lag", 
-    # "log_dens_cp_lag", 
-    # "RCA_cp_lag",
     "log_RCA_cp_lag",
-    
-    # "diversity_c", 
-    # "TPI_c", 
-    # "eci_c", # neg and insig
-    # "log(gdp_percap_ppp_2021intdollars)",
-    # "log(pop_total)", # insig
-    
-    # "prev_M_cp_zero", 
-    
-    # "pci_p_lag",
     "spi_orth_p_lag",
     "epi_orth_p_lag"
-    
-    # "pci_p_lag * dens_cp_lag",
-    # "spi_orth_p_lag * dens_cp_lag",
-    # "epi_orth_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_orth_p_lag * dens_cp_lag"
-    # "TPI_orth_prody_p_lag * dens_cp_lag"
-    # "TPI_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_orth_prody_p_lag * dens_cp_lag"
   ), collapse = " + ")
   
   fixed_effects <- if (isTRUE(use_common_FE)) {
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -127,22 +71,12 @@ plt_theme_2 <- theme(
   
   # Model family
   glm_family <- (
-    binomial(link = "logit")                # Logit
-    # family = binomial(link = "probit")      # Probit
-    # family = binomial(link = "cloglog")     # Complementary log-log
-    # family = quasibinomial(link = "logit")    # Quasibinomial
-    # family   = gaussian(link = "identity")  # Linear probability
+    binomial(link = "logit") # Logit
   )
   
   # Data filters
   cp_df_filter_conditions <- quote(
     prev_M_cp_zero == 1 &
-      # income_lvl %in% c("H", "UM") &
-      # income_lvl %in% c("LM", "L") &
-      # income_lvl == "H" &
-      # income_lvl != "H" &
-      # income_lvl == "UM" &
-      # income_lvl == "L" &
       year %in% logistic_years
   )
   
@@ -153,11 +87,6 @@ plt_theme_2 <- theme(
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -173,12 +102,10 @@ plt_theme_2 <- theme(
   mc_0_tpi_ALL <- feglm(
     formula_tpi,
     panel.id = ~ cp_id + year,
-    # cluster = ~ country_iso3,
     cluster = ~ country_iso3 + prod_code,
     family = glm_family, 
     combine.quick = FALSE, 
     data = cp_df[eval(cp_df_filter_conditions)]
-    # data = cp_df_oversampled[eval(cp_df_filter_conditions)]
   )
   
   # Estimation duration
@@ -204,71 +131,31 @@ plt_theme_2 <- theme(
 }
 
 { # ⚠️ mC_1_tpi_ALL -----------------------------------------------
-  # PCI, PSPI and PEPI, no interactions
-  # This model adds both SPI and EPI in one model
   predictors <- paste(c(
     "dens_cp_lag", 
-    # "log_dens_cp_lag", 
-    # "RCA_cp_lag",
     "log_RCA_cp_lag",
-    
-    # "diversity_c", 
-    # "TPI_c", 
-    # "eci_c", # neg and insig
-    # "log(gdp_percap_ppp_2021intdollars)",
-    # "log(pop_total)", # insig
-    
-    # "prev_M_cp_zero", 
-    
     "pci_p_lag",
     "spi_orth_p_lag",
     "epi_orth_p_lag"
-    
-    # "pci_p_lag * dens_cp_lag",
-    # "spi_orth_p_lag * dens_cp_lag",
-    # "epi_orth_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_orth_p_lag * dens_cp_lag"
-    # "TPI_orth_prody_p_lag * dens_cp_lag"
-    # "TPI_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_orth_prody_p_lag * dens_cp_lag"
   ), collapse = " + ")
   
   fixed_effects <- if (isTRUE(use_common_FE)) {
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
   }
   
   # Model family
-  glm_family <- (
-    binomial(link = "logit")                # Logit
-    # family = binomial(link = "probit")      # Probit
-    # family = binomial(link = "cloglog")     # Complementary log-log
-    # family = quasibinomial(link = "logit")    # Quasibinomial
-    # family   = gaussian(link = "identity")  # Linear probability
+  glm_family <- ( 
+    binomial(link = "logit") # Logit
   )
   
   # Data filters
   cp_df_filter_conditions <- quote(
     prev_M_cp_zero == 1 &
-      # income_lvl %in% c("H", "UM") &
-      # income_lvl %in% c("LM", "L") &
-      # income_lvl == "H" &
-      # income_lvl != "H" &
-      # income_lvl == "UM" &
-      # income_lvl == "L" &
       year %in% logistic_years
   )
   
@@ -279,11 +166,6 @@ plt_theme_2 <- theme(
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -299,12 +181,10 @@ plt_theme_2 <- theme(
   mC_1_tpi_ALL <- feglm(
     formula_tpi,
     panel.id = ~ cp_id + year,
-    # cluster = ~ country_iso3,
     cluster = ~ country_iso3 + prod_code,
     family = glm_family, 
     combine.quick = FALSE, 
     data = cp_df[eval(cp_df_filter_conditions)]
-    # data = cp_df_oversampled[eval(cp_df_filter_conditions)]
   )
   
   # Estimation duration
@@ -330,32 +210,12 @@ plt_theme_2 <- theme(
 }
 
 { # ⚠️ mC_2_tpi_ALL -----------------------------------------------
-  # This model adds both SPI and EPI in one model
   predictors <- paste(c(
     "dens_cp_lag", 
-    # "log_dens_cp_lag", 
-    # "RCA_cp_lag",
     "log_RCA_cp_lag",
-    
-    # "diversity_c", 
-    # "TPI_c", 
-    # "eci_c", # neg and insig
-    # "log(gdp_percap_ppp_2021intdollars)",
-    # "log(pop_total)", # insig
-    
-    # "prev_M_cp_zero", 
-    
     "pci_p_lag * dens_cp_lag",
     "spi_orth_p_lag * dens_cp_lag",
     "epi_orth_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_orth_p_lag * dens_cp_lag"
-    # "TPI_orth_prody_p_lag * dens_cp_lag"
-    # "TPI_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_orth_prody_p_lag * dens_cp_lag"
   ), collapse = " + ")
   
   # Use common or individual FE (set use_common_FE to TRUE if common FE should
@@ -364,11 +224,6 @@ plt_theme_2 <- theme(
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -376,22 +231,12 @@ plt_theme_2 <- theme(
   
   # Model family
   glm_family <- (
-    binomial(link = "logit")                # Logit
-    # family = binomial(link = "probit")      # Probit
-    # family = binomial(link = "cloglog")     # Complementary log-log
-    # family = quasibinomial(link = "logit")    # Quasibinomial
-    # family   = gaussian(link = "identity")  # Linear probability
+    binomial(link = "logit") # Logit
   )
   
   # Data filters
   cp_df_filter_conditions <- quote(
     prev_M_cp_zero == 1 &
-      # income_lvl %in% c("H", "UM") &
-      # income_lvl %in% c("LM", "L") &
-      # income_lvl == "H" &
-      # income_lvl != "H" &
-      # income_lvl == "UM" &
-      # income_lvl == "L" &
       year %in% logistic_years
   )
   
@@ -406,12 +251,10 @@ plt_theme_2 <- theme(
   mC_2_tpi_ALL <- feglm(
     formula_tpi,
     panel.id = ~ cp_id + year,
-    # cluster = ~ country_iso3,
     cluster = ~ country_iso3 + prod_code,
     family = glm_family, 
     combine.quick = FALSE, 
     data = cp_df[eval(cp_df_filter_conditions)]
-    # data = cp_df_oversampled[eval(cp_df_filter_conditions)]
   )
   
   # Estimation duration
@@ -466,7 +309,6 @@ plt_theme_2 <- theme(
 
 { ## Confusion matrix ####
   classification_threshold <- 0.50 # probability used for classifying pred
-  # classification_threshold <- 0.20
   
   message("ℹ️ TPI Model: ")
   print(caret::confusionMatrix(
@@ -716,7 +558,7 @@ plt_theme_2 <- theme(
   percentile_high <- 1 - percentile_low
   
   grid.arrange(
-    ## PCI ↦ scenarios of density
+    ## PCI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years) %>%
       summarise(
@@ -770,7 +612,7 @@ plt_theme_2 <- theme(
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PSPI ↦ scenarios of density
+    ## PSPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years) %>%
       summarise(
@@ -824,7 +666,7 @@ plt_theme_2 <- theme(
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PEPI ↦ scenarios of density
+    ## PEPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years) %>%
       summarise(
@@ -870,7 +712,6 @@ plt_theme_2 <- theme(
       ggplot(aes(epi_orth_p_lag, Pr, colour = scenario)) +
       geom_line(size = 1) +
       labs(
-        # x = latex2exp::TeX("$PEPI_{pt-1}^{\\perp}$"),
         x = latex2exp::TeX("$PEPI_{pt-1}^{\\perp}$"),
         y = latex2exp::TeX("$\\hat{P}(\\Delta M_{cpt} = 1)$"), 
         title = "Marginal Effect of PEPI", 
@@ -884,32 +725,12 @@ plt_theme_2 <- theme(
 }
 
 { # ⚠️ mC_2_tpi_HUM -----------------------------------------------
-  # This model adds both SPI and EPI in one model
   predictors <- paste(c(
     "dens_cp_lag", 
-    # "log_dens_cp_lag", 
-    # "RCA_cp_lag",
     "log_RCA_cp_lag",
-    
-    # "diversity_c", 
-    # "TPI_c", 
-    # "eci_c", # neg and insig
-    # "log(gdp_percap_ppp_2021intdollars)",
-    # "log(pop_total)", # insig
-    
-    # "prev_M_cp_zero", 
-    
     "pci_p_lag * dens_cp_lag",
     "spi_orth_p_lag * dens_cp_lag",
     "epi_orth_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_orth_p_lag * dens_cp_lag"
-    # "TPI_orth_prody_p_lag * dens_cp_lag"
-    # "TPI_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_orth_prody_p_lag * dens_cp_lag"
   ), collapse = " + ")
   
   # Use common or individual FE (set use_common_FE to TRUE if common FE should
@@ -918,11 +739,6 @@ plt_theme_2 <- theme(
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -930,22 +746,13 @@ plt_theme_2 <- theme(
   
   # Model family
   glm_family <- (
-    binomial(link = "logit")                # Logit
-    # family = binomial(link = "probit")      # Probit
-    # family = binomial(link = "cloglog")     # Complementary log-log
-    # family = quasibinomial(link = "logit")    # Quasibinomial
-    # family   = gaussian(link = "identity")  # Linear probability
+    binomial(link = "logit") # Logit
   )
   
   # Data filters
   cp_df_filter_conditions <- quote(
     prev_M_cp_zero == 1 &
       income_lvl %in% c("H", "UM") &
-      # income_lvl %in% c("LM", "L") &
-      # income_lvl == "H" &
-      # income_lvl != "H" &
-      # income_lvl == "UM" &
-      # income_lvl == "L" &
       year %in% logistic_years
   )
   
@@ -960,12 +767,10 @@ plt_theme_2 <- theme(
   mC_2_tpi_HUM <- feglm(
     formula_tpi,
     panel.id = ~ cp_id + year,
-    # cluster = ~ country_iso3,
     cluster = ~ country_iso3 + prod_code,
     family = glm_family, 
     combine.quick = FALSE, 
     data = cp_df[eval(cp_df_filter_conditions)]
-    # data = cp_df_oversampled[eval(cp_df_filter_conditions)]
   )
   
   # Estimation duration
@@ -997,7 +802,6 @@ plt_theme_2 <- theme(
   year_to_plot <- 2016
   
   mC_2_tpi_glm <- glm(
-    # formula = formula_tpi_glm,
     formula = new_M_cp ~ 
       dens_cp_lag + 
       log_RCA_cp_lag + 
@@ -1020,7 +824,6 @@ plt_theme_2 <- theme(
 
 { ## Confusion matrix ####
   classification_threshold <- 0.50 # probability used for classifying pred
-  # classification_threshold <- 0.20
   
   message("ℹ️ TPI Model: ")
   print(caret::confusionMatrix(
@@ -1033,19 +836,19 @@ plt_theme_2 <- theme(
 
 { ## ROC-AUC ####
   evalmod(
-    scores   = list(fitted(mC_2_tpi_HUM)),                    # just one model
+    scores   = list(fitted(mC_2_tpi_HUM)),
     labels   = list(as.integer(mC_2_tpi_HUM$y)),
-    modnames = "TPI Model",                                    # length-1 character
-    dsids    = 1                                               # single ID
+    modnames = "TPI Model",
+    dsids    = 1
   ) %>%
-    { ggplot2::autoplot(., "ROC") +                            # no facet needed
+    { ggplot2::autoplot(., "ROC") +
         geom_text(
-          data = auc(.) %>%                                   # compute AUC table
+          data = auc(.) %>%
             as.data.frame() %>%
             filter(curvetypes == "ROC") %>%
             mutate(
-              label = sprintf("AUC = %.3f", aucs),            # format AUC
-              x     = 0.45,                                   # tweak coords
+              label = sprintf("AUC = %.3f", aucs),
+              x     = 0.45,
               y     = 0.15
             ),
           aes(x = x, y = y, label = label),
@@ -1094,32 +897,12 @@ plt_theme_2 <- theme(
 }
 
 { # ⚠️ mC_2_tpi_LML -----------------------------------------------
-  # This model adds both SPI and EPI in one model
   predictors <- paste(c(
     "dens_cp_lag", 
-    # "log_dens_cp_lag", 
-    # "RCA_cp_lag",
     "log_RCA_cp_lag",
-    
-    # "diversity_c", 
-    # "TPI_c", 
-    # "eci_c", # neg and insig
-    # "log(gdp_percap_ppp_2021intdollars)",
-    # "log(pop_total)", # insig
-    
-    # "prev_M_cp_zero", 
-    
     "pci_p_lag * dens_cp_lag",
     "spi_orth_p_lag * dens_cp_lag",
     "epi_orth_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_orth_p_lag * dens_cp_lag"
-    # "TPI_orth_prody_p_lag * dens_cp_lag"
-    # "TPI_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_orth_prody_p_lag * dens_cp_lag"
   ), collapse = " + ")
   
   # Use common or individual FE (set use_common_FE to TRUE if common FE should
@@ -1128,11 +911,6 @@ plt_theme_2 <- theme(
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -1140,22 +918,13 @@ plt_theme_2 <- theme(
   
   # Model family
   glm_family <- (
-    binomial(link = "logit")                # Logit
-    # family = binomial(link = "probit")      # Probit
-    # family = binomial(link = "cloglog")     # Complementary log-log
-    # family = quasibinomial(link = "logit")    # Quasibinomial
-    # family   = gaussian(link = "identity")  # Linear probability
+    binomial(link = "logit") # Logit
   )
   
   # Data filters
   cp_df_filter_conditions <- quote(
     prev_M_cp_zero == 1 &
-      # income_lvl %in% c("H", "UM") &
       income_lvl %in% c("LM", "L") &
-      # income_lvl == "H" &
-      # income_lvl != "H" &
-      # income_lvl == "UM" &
-      # income_lvl == "L" &
       year %in% logistic_years
   )
   
@@ -1170,12 +939,10 @@ plt_theme_2 <- theme(
   mC_2_tpi_LML <- feglm(
     formula_tpi,
     panel.id = ~ cp_id + year,
-    # cluster = ~ country_iso3,
     cluster = ~ country_iso3 + prod_code,
     family = glm_family, 
     combine.quick = FALSE, 
     data = cp_df[eval(cp_df_filter_conditions)]
-    # data = cp_df_oversampled[eval(cp_df_filter_conditions)]
   )
   
   # Estimation duration
@@ -1207,7 +974,6 @@ plt_theme_2 <- theme(
   year_to_plot <- 2016
   
   mC_2_tpi_glm <- glm(
-    # formula = formula_tpi_glm,
     formula = new_M_cp ~ 
       dens_cp_lag + 
       log_RCA_cp_lag + 
@@ -1230,7 +996,6 @@ plt_theme_2 <- theme(
 
 { ## Confusion matrix ####
   classification_threshold <- 0.50 # probability used for classifying pred
-  # classification_threshold <- 0.20
   
   message("ℹ️ TPI Model: ")
   print(caret::confusionMatrix(
@@ -1243,19 +1008,19 @@ plt_theme_2 <- theme(
 
 { ## ROC-AUC ####
   evalmod(
-    scores   = list(fitted(mC_2_tpi_LML)),                    # just one model
+    scores   = list(fitted(mC_2_tpi_LML)),
     labels   = list(as.integer(mC_2_tpi_LML$y)),
-    modnames = "TPI Model",                                    # length-1 character
-    dsids    = 1                                               # single ID
+    modnames = "TPI Model",
+    dsids    = 1
   ) %>%
-    { ggplot2::autoplot(., "ROC") +                            # no facet needed
+    { ggplot2::autoplot(., "ROC") +
         geom_text(
-          data = auc(.) %>%                                   # compute AUC table
+          data = auc(.) %>%
             as.data.frame() %>%
             filter(curvetypes == "ROC") %>%
             mutate(
-              label = sprintf("AUC = %.3f", aucs),            # format AUC
-              x     = 0.45,                                   # tweak coords
+              label = sprintf("AUC = %.3f", aucs),
+              x     = 0.45,
               y     = 0.15
             ),
           aes(x = x, y = y, label = label),
@@ -1651,7 +1416,7 @@ plt_theme_2 <- theme(
   
   grid.arrange(
     ### HUM ####
-    ## PCI ↦ scenarios of density
+    ## PCI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("H", "UM")) %>%
@@ -1706,7 +1471,7 @@ plt_theme_2 <- theme(
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PSPI ↦ scenarios of density
+    ## PSPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("H", "UM")) %>%
@@ -1761,7 +1526,7 @@ plt_theme_2 <- theme(
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PEPI ↦ scenarios of density
+    ## PEPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("H", "UM")) %>%
@@ -1817,7 +1582,7 @@ plt_theme_2 <- theme(
       theme(legend.position = "top", legend.direction = "horizontal"),
     
     ### LML ####
-    ## PCI ↦ scenarios of density
+    ## PCI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("LM", "L")) %>%
@@ -1872,7 +1637,7 @@ plt_theme_2 <- theme(
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PSPI ↦ scenarios of density
+    ## PSPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("LM", "L")) %>%
@@ -1927,7 +1692,7 @@ plt_theme_2 <- theme(
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PEPI ↦ scenarios of density
+    ## PEPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("LM", "L")) %>%
@@ -1985,10 +1750,6 @@ plt_theme_2 <- theme(
     ncol = 3
   )
 }
-
-# Marginal effects line plots ####
-# ⚠️ SEE logistic_persistent_marginal_effects_line.R 
-
 
 # Check models ------------------------------------------------------------
 summary(mC_1_tpi_ALL) 
@@ -2067,9 +1828,6 @@ summary(mC_2_tpi_LML)
         mutate(set = "LM & L"),
       
     ) %>% select(set, n_countries, n_years)
-    # corresponds to infra, except for one country for H & UM
-    # perhaps this country does not have new_M_cp = 1 for any rows and is 
-    # therefore removed? 
     
     cp_df %>%
       group_by(country_iso3, year) %>%
@@ -2077,7 +1835,6 @@ summary(mC_2_tpi_LML)
              all(new_M_cp == 0)) %>%
       ungroup() %>%
       distinct(country_iso3, year)
-    # this is correct, but I don't see a country that never has 
     
     # Country for which new_M_cp is always 0
     cp_df %>%
@@ -2085,7 +1842,6 @@ summary(mC_2_tpi_LML)
       filter(all(new_M_cp == 0, na.rm = TRUE)) %>%
       ungroup() %>%
       distinct(country_iso3)
-    # GNQ --> this country is probably removed
   }
 }
 
@@ -2147,7 +1903,7 @@ summary(mC_2_tpi_LML)
         # 1b. else, look for the country*year interaction
         int_nm <- grep("^country_iso3\\^", names(fe_list), value = TRUE)
         if (length(int_nm)) {
-          lvl <- names(fe_list[[int_nm[1]]])           # e.g. "BEL_2016"
+          lvl <- names(fe_list[[int_nm[1]]]) # e.g. "BEL_2016"
           return( length(unique(sub("_.*$", "", lvl))) )
         }
         # 1c. fallback: pick the first FE and parse
@@ -2169,7 +1925,7 @@ summary(mC_2_tpi_LML)
         # 2b. else, look for the country*year interaction
         int_nm <- grep("\\^year$", names(fe_list), value = TRUE)
         if (length(int_nm)) {
-          lvl <- names(fe_list[[int_nm[1]]])           # e.g. "BEL_2016"
+          lvl <- names(fe_list[[int_nm[1]]]) # e.g. "BEL_2016"
           return( length(unique(sub(".*_", "", lvl))) )
         }
         # 2c. fallback: pick the first FE and parse
@@ -2178,16 +1934,13 @@ summary(mC_2_tpi_LML)
       }
     )
     
-    # TODO: nyears and ncountries not correctly extracted if country*year FE 
-    # are not used... 
-    
     # ROC-AUC
     fitstat_register(
       type  = "auc",
       alias = "ROC-AUC",
       fun   = function(x){
-        resp  <- x$y                # the observed 0/1 outcome
-        preds <- fitted(x)          # the model’s fitted probabilities
+        resp  <- x$y # the observed 0/1 outcome
+        preds <- fitted(x) # the model’s fitted probabilities
         as.numeric( pROC::auc(resp, preds) )
       }
     )
@@ -2198,15 +1951,11 @@ summary(mC_2_tpi_LML)
       alias = "F$_1$",
       fun   = function(x) {
         
-        resp  <- x$y         # observed 0/1 outcome
-        probs <- fitted(x)   # predicted probabilities
+        resp  <- x$y # observed 0/1 outcome
+        probs <- fitted(x) # predicted probabilities
         
-        # ── 1. choose a threshold ────────────────────────────────────────────────
+        # Choose threshold
         thr   <- 0.1 # fixed cut-off
-        # 0.1275 for 0.03; 0.15 for 0.04; 0.1713 for 0.08
-        # thr <- pROC::coords(pROC::roc(resp, probs), "best",
-        #                     ret = "threshold", best.method = "youden")
-        # ─────────────────────────────────────────────────────────────────────────
         
         pred  <- as.integer(probs >= thr)
         
@@ -2214,8 +1963,8 @@ summary(mC_2_tpi_LML)
         FP <- sum(pred == 1 & resp == 0)
         FN <- sum(pred == 0 & resp == 1)
         
-        if (TP + FP + FN == 0) return(NaN)          # edge case
-        return( 2 * TP / (2 * TP + FP + FN) )       # F1 formula
+        if (TP + FP + FN == 0) return(NaN) # edge case
+        return( 2 * TP / (2 * TP + FP + FN) ) # F1 formula
       }
     )
   }
@@ -2287,8 +2036,7 @@ summary(mC_2_tpi_LML)
     text = as.character(modB), 
     "data/data_processed/LaTeX data values/modB.txt"
   )
-  # TODO: add one model without interactions (only direct effects)
-  
+
   ## Export coefficients ####
   ### VIFs ####
   cat(sub(
@@ -2617,57 +2365,23 @@ summary(mC_2_tpi_LML)
   # model calls are replaced by the ones in common_fixed_effects
   
   common_fixed_effects <- paste(c(
-    # "year",
-    # "country_iso3",
-    # "prod_code",
-    # "prod_code^year",
-    # "country_iso3^prod_code",
     "country_iso3^year",
     0 ), collapse = " + ")
 }
 
 { # ⚠️ mC_1_tpi_ALL -----------------------------------------------
-  # This model adds both SPI and EPI in one model
   predictors <- paste(c(
     "dens_cp_lag", 
-    # "log_dens_cp_lag", 
-    # "RCA_cp_lag",
     "log_RCA_cp_lag",
-    
-    # "diversity_c", 
-    # "TPI_c", 
-    # "eci_c", # neg and insig
-    # "log(gdp_percap_ppp_2021intdollars)",
-    # "log(pop_total)", # insig
-    
-    # "prev_M_cp_zero", 
-    
     "pci_p_lag",
     "spi_p_lag",
     "epi_p_lag"
-    
-    # "pci_p_lag * dens_cp_lag",
-    # "spi_p_lag * dens_cp_lag",
-    # "epi_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_p_lag * dens_cp_lag"
-    # "TPI_prody_p_lag * dens_cp_lag"
-    # "TPI_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_prody_p_lag * dens_cp_lag"
   ), collapse = " + ")
   
   fixed_effects <- if (isTRUE(use_common_FE)) {
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -2675,22 +2389,12 @@ summary(mC_2_tpi_LML)
   
   # Model family
   glm_family <- (
-    binomial(link = "logit")                # Logit
-    # family = binomial(link = "probit")      # Probit
-    # family = binomial(link = "cloglog")     # Complementary log-log
-    # family = quasibinomial(link = "logit")    # Quasibinomial
-    # family   = gaussian(link = "identity")  # Linear probability
+    binomial(link = "logit") # Logit
   )
   
   # Data filters
   cp_df_filter_conditions <- quote(
     prev_M_cp_zero == 1 &
-      # income_lvl %in% c("H", "UM") &
-      # income_lvl %in% c("LM", "L") &
-      # income_lvl == "H" &
-      # income_lvl != "H" &
-      # income_lvl == "UM" &
-      # income_lvl == "L" &
       year %in% logistic_years
   )
   
@@ -2701,11 +2405,6 @@ summary(mC_2_tpi_LML)
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -2721,12 +2420,10 @@ summary(mC_2_tpi_LML)
   mC_1_tpi_ALL <- feglm(
     formula_tpi,
     panel.id = ~ cp_id + year,
-    # cluster = ~ country_iso3,
     cluster = ~ country_iso3 + prod_code,
     family = glm_family, 
     combine.quick = FALSE, 
     data = cp_df[eval(cp_df_filter_conditions)]
-    # data = cp_df_oversampled[eval(cp_df_filter_conditions)]
   )
   
   # Estimation duration
@@ -2752,32 +2449,12 @@ summary(mC_2_tpi_LML)
 }
 
 { # ⚠️ mC_2_tpi_ALL -----------------------------------------------
-  # This model adds both SPI and EPI in one model
   predictors <- paste(c(
     "dens_cp_lag", 
-    # "log_dens_cp_lag", 
-    # "RCA_cp_lag",
     "log_RCA_cp_lag",
-    
-    # "diversity_c", 
-    # "TPI_c", 
-    # "eci_c", # neg and insig
-    # "log(gdp_percap_ppp_2021intdollars)",
-    # "log(pop_total)", # insig
-    
-    # "prev_M_cp_zero", 
-    
     "pci_p_lag * dens_cp_lag",
     "spi_p_lag * dens_cp_lag",
     "epi_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_p_lag * dens_cp_lag"
-    # "TPI_prody_p_lag * dens_cp_lag"
-    # "TPI_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_prody_p_lag * dens_cp_lag"
   ), collapse = " + ")
   
   # Use common or individual FE (set use_common_FE to TRUE if common FE should
@@ -2786,11 +2463,6 @@ summary(mC_2_tpi_LML)
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -2798,22 +2470,12 @@ summary(mC_2_tpi_LML)
   
   # Model family
   glm_family <- (
-    binomial(link = "logit")                # Logit
-    # family = binomial(link = "probit")      # Probit
-    # family = binomial(link = "cloglog")     # Complementary log-log
-    # family = quasibinomial(link = "logit")    # Quasibinomial
-    # family   = gaussian(link = "identity")  # Linear probability
+    binomial(link = "logit") # Logit
   )
   
   # Data filters
   cp_df_filter_conditions <- quote(
     prev_M_cp_zero == 1 &
-      # income_lvl %in% c("H", "UM") &
-      # income_lvl %in% c("LM", "L") &
-      # income_lvl == "H" &
-      # income_lvl != "H" &
-      # income_lvl == "UM" &
-      # income_lvl == "L" &
       year %in% logistic_years
   )
   
@@ -2828,12 +2490,10 @@ summary(mC_2_tpi_LML)
   mC_2_tpi_ALL <- feglm(
     formula_tpi,
     panel.id = ~ cp_id + year,
-    # cluster = ~ country_iso3,
     cluster = ~ country_iso3 + prod_code,
     family = glm_family, 
     combine.quick = FALSE, 
     data = cp_df[eval(cp_df_filter_conditions)]
-    # data = cp_df_oversampled[eval(cp_df_filter_conditions)]
   )
   
   # Estimation duration
@@ -2865,7 +2525,6 @@ summary(mC_2_tpi_LML)
   year_to_plot <- 2016
   
   mC_2_tpi_glm <- glm(
-    # formula = formula_tpi_glm,
     formula = new_M_cp ~ 
       dens_cp_lag + 
       log_RCA_cp_lag + 
@@ -2888,7 +2547,6 @@ summary(mC_2_tpi_LML)
 
 { ## Confusion matrix ####
   classification_threshold <- 0.50 # probability used for classifying pred
-  # classification_threshold <- 0.20
   
   message("ℹ️ TPI Model: ")
   print(caret::confusionMatrix(
@@ -2901,19 +2559,19 @@ summary(mC_2_tpi_LML)
 
 { ## ROC-AUC ####
   evalmod(
-    scores   = list(fitted(mC_2_tpi_ALL)),                    # just one model
+    scores   = list(fitted(mC_2_tpi_ALL)),
     labels   = list(as.integer(mC_2_tpi_ALL$y)),
-    modnames = "TPI Model",                                    # length-1 character
-    dsids    = 1                                               # single ID
+    modnames = "TPI Model",
+    dsids    = 1
   ) %>%
-    { ggplot2::autoplot(., "ROC") +                            # no facet needed
+    { ggplot2::autoplot(., "ROC") +
         geom_text(
-          data = auc(.) %>%                                   # compute AUC table
+          data = auc(.) %>%
             as.data.frame() %>%
             filter(curvetypes == "ROC") %>%
             mutate(
-              label = sprintf("AUC = %.3f", aucs),            # format AUC
-              x     = 0.45,                                   # tweak coords
+              label = sprintf("AUC = %.3f", aucs),
+              x     = 0.45,
               y     = 0.15
             ),
           aes(x = x, y = y, label = label),
@@ -3138,7 +2796,7 @@ summary(mC_2_tpi_LML)
   percentile_high <- 1 - percentile_low
   
   grid.arrange(
-    ## PCI ↦ scenarios of density
+    ## PCI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years) %>%
       summarise(
@@ -3192,7 +2850,7 @@ summary(mC_2_tpi_LML)
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PSPI ↦ scenarios of density
+    ## PSPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years) %>%
       summarise(
@@ -3246,7 +2904,7 @@ summary(mC_2_tpi_LML)
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PEPI ↦ scenarios of density
+    ## PEPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years) %>%
       summarise(
@@ -3306,32 +2964,12 @@ summary(mC_2_tpi_LML)
 }
 
 { # ⚠️ mC_2_tpi_HUM -----------------------------------------------
-  # This model adds both SPI and EPI in one model
   predictors <- paste(c(
     "dens_cp_lag", 
-    # "log_dens_cp_lag", 
-    # "RCA_cp_lag",
     "log_RCA_cp_lag",
-    
-    # "diversity_c", 
-    # "TPI_c", 
-    # "eci_c", # neg and insig
-    # "log(gdp_percap_ppp_2021intdollars)",
-    # "log(pop_total)", # insig
-    
-    # "prev_M_cp_zero", 
-    
     "pci_p_lag * dens_cp_lag",
     "spi_p_lag * dens_cp_lag",
     "epi_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_p_lag * dens_cp_lag"
-    # "TPI_prody_p_lag * dens_cp_lag"
-    # "TPI_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_prody_p_lag * dens_cp_lag"
   ), collapse = " + ")
   
   # Use common or individual FE (set use_common_FE to TRUE if common FE should
@@ -3340,11 +2978,6 @@ summary(mC_2_tpi_LML)
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -3352,22 +2985,13 @@ summary(mC_2_tpi_LML)
   
   # Model family
   glm_family <- (
-    binomial(link = "logit")                # Logit
-    # family = binomial(link = "probit")      # Probit
-    # family = binomial(link = "cloglog")     # Complementary log-log
-    # family = quasibinomial(link = "logit")    # Quasibinomial
-    # family   = gaussian(link = "identity")  # Linear probability
+    binomial(link = "logit") # Logit
   )
   
   # Data filters
   cp_df_filter_conditions <- quote(
     prev_M_cp_zero == 1 &
       income_lvl %in% c("H", "UM") &
-      # income_lvl %in% c("LM", "L") &
-      # income_lvl == "H" &
-      # income_lvl != "H" &
-      # income_lvl == "UM" &
-      # income_lvl == "L" &
       year %in% logistic_years
   )
   
@@ -3382,12 +3006,10 @@ summary(mC_2_tpi_LML)
   mC_2_tpi_HUM <- feglm(
     formula_tpi,
     panel.id = ~ cp_id + year,
-    # cluster = ~ country_iso3,
     cluster = ~ country_iso3 + prod_code,
     family = glm_family, 
     combine.quick = FALSE, 
     data = cp_df[eval(cp_df_filter_conditions)]
-    # data = cp_df_oversampled[eval(cp_df_filter_conditions)]
   )
   
   # Estimation duration
@@ -3419,7 +3041,6 @@ summary(mC_2_tpi_LML)
   year_to_plot <- 2016
   
   mC_2_tpi_glm <- glm(
-    # formula = formula_tpi_glm,
     formula = new_M_cp ~ 
       dens_cp_lag + 
       log_RCA_cp_lag + 
@@ -3442,7 +3063,6 @@ summary(mC_2_tpi_LML)
 
 { ## Confusion matrix ####
   classification_threshold <- 0.50 # probability used for classifying pred
-  # classification_threshold <- 0.20
   
   message("ℹ️ TPI Model: ")
   print(caret::confusionMatrix(
@@ -3455,19 +3075,19 @@ summary(mC_2_tpi_LML)
 
 { ## ROC-AUC ####
   evalmod(
-    scores   = list(fitted(mC_2_tpi_HUM)),                    # just one model
+    scores   = list(fitted(mC_2_tpi_HUM)),
     labels   = list(as.integer(mC_2_tpi_HUM$y)),
-    modnames = "TPI Model",                                    # length-1 character
-    dsids    = 1                                               # single ID
+    modnames = "TPI Model",
+    dsids    = 1
   ) %>%
-    { ggplot2::autoplot(., "ROC") +                            # no facet needed
+    { ggplot2::autoplot(., "ROC") +
         geom_text(
-          data = auc(.) %>%                                   # compute AUC table
+          data = auc(.) %>%
             as.data.frame() %>%
             filter(curvetypes == "ROC") %>%
             mutate(
-              label = sprintf("AUC = %.3f", aucs),            # format AUC
-              x     = 0.45,                                   # tweak coords
+              label = sprintf("AUC = %.3f", aucs),
+              x     = 0.45,
               y     = 0.15
             ),
           aes(x = x, y = y, label = label),
@@ -3516,32 +3136,12 @@ summary(mC_2_tpi_LML)
 }
 
 { # ⚠️ mC_2_tpi_LML -----------------------------------------------
-  # This model adds both SPI and EPI in one model
   predictors <- paste(c(
     "dens_cp_lag", 
-    # "log_dens_cp_lag", 
-    # "RCA_cp_lag",
     "log_RCA_cp_lag",
-    
-    # "diversity_c", 
-    # "TPI_c", 
-    # "eci_c", # neg and insig
-    # "log(gdp_percap_ppp_2021intdollars)",
-    # "log(pop_total)", # insig
-    
-    # "prev_M_cp_zero", 
-    
     "pci_p_lag * dens_cp_lag",
     "spi_p_lag * dens_cp_lag",
     "epi_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_p_lag * dens_cp_lag"
-    # "TPI_prody_p_lag * dens_cp_lag"
-    # "TPI_p_lag * dens_cp_lag"
-    
-    # "prody_p_lag * dens_cp_lag",
-    # "TPI_prody_p_lag * dens_cp_lag"
   ), collapse = " + ")
   
   # Use common or individual FE (set use_common_FE to TRUE if common FE should
@@ -3550,11 +3150,6 @@ summary(mC_2_tpi_LML)
     common_fixed_effects
   } else {
     paste(c(
-      # "year",
-      # "country_iso3",
-      # "prod_code",
-      # "prod_code^year",
-      # "country_iso3^prod_code",
       "country_iso3^year",
       0
     ), collapse = " + ")
@@ -3562,22 +3157,13 @@ summary(mC_2_tpi_LML)
   
   # Model family
   glm_family <- (
-    binomial(link = "logit")                # Logit
-    # family = binomial(link = "probit")      # Probit
-    # family = binomial(link = "cloglog")     # Complementary log-log
-    # family = quasibinomial(link = "logit")    # Quasibinomial
-    # family   = gaussian(link = "identity")  # Linear probability
+    binomial(link = "logit") # Logit
   )
   
   # Data filters
   cp_df_filter_conditions <- quote(
     prev_M_cp_zero == 1 &
-      # income_lvl %in% c("H", "UM") &
       income_lvl %in% c("LM", "L") &
-      # income_lvl == "H" &
-      # income_lvl != "H" &
-      # income_lvl == "UM" &
-      # income_lvl == "L" &
       year %in% logistic_years
   )
   
@@ -3592,12 +3178,10 @@ summary(mC_2_tpi_LML)
   mC_2_tpi_LML <- feglm(
     formula_tpi,
     panel.id = ~ cp_id + year,
-    # cluster = ~ country_iso3,
     cluster = ~ country_iso3 + prod_code,
     family = glm_family, 
     combine.quick = FALSE, 
     data = cp_df[eval(cp_df_filter_conditions)]
-    # data = cp_df_oversampled[eval(cp_df_filter_conditions)]
   )
   
   # Estimation duration
@@ -3652,7 +3236,6 @@ summary(mC_2_tpi_LML)
 
 { ## Confusion matrix ####
   classification_threshold <- 0.50 # probability used for classifying pred
-  # classification_threshold <- 0.20
   
   message("ℹ️ TPI Model: ")
   print(caret::confusionMatrix(
@@ -3665,19 +3248,19 @@ summary(mC_2_tpi_LML)
 
 { ## ROC-AUC ####
   evalmod(
-    scores   = list(fitted(mC_2_tpi_LML)),                    # just one model
+    scores   = list(fitted(mC_2_tpi_LML)),
     labels   = list(as.integer(mC_2_tpi_LML$y)),
-    modnames = "TPI Model",                                    # length-1 character
-    dsids    = 1                                               # single ID
+    modnames = "TPI Model",
+    dsids    = 1
   ) %>%
-    { ggplot2::autoplot(., "ROC") +                            # no facet needed
+    { ggplot2::autoplot(., "ROC") +
         geom_text(
-          data = auc(.) %>%                                   # compute AUC table
+          data = auc(.) %>%
             as.data.frame() %>%
             filter(curvetypes == "ROC") %>%
             mutate(
-              label = sprintf("AUC = %.3f", aucs),            # format AUC
-              x     = 0.45,                                   # tweak coords
+              label = sprintf("AUC = %.3f", aucs),
+              x     = 0.45,
               y     = 0.15
             ),
           aes(x = x, y = y, label = label),
@@ -4073,7 +3656,7 @@ summary(mC_2_tpi_LML)
   
   grid.arrange(
     ### HUM ####
-    ## PCI ↦ scenarios of density
+    ## PCI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("H", "UM")) %>%
@@ -4128,7 +3711,7 @@ summary(mC_2_tpi_LML)
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PSPI ↦ scenarios of density
+    ## PSPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("H", "UM")) %>%
@@ -4183,7 +3766,7 @@ summary(mC_2_tpi_LML)
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PEPI ↦ scenarios of density
+    ## PEPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("H", "UM")) %>%
@@ -4239,7 +3822,7 @@ summary(mC_2_tpi_LML)
       theme(legend.position = "top", legend.direction = "horizontal"),
     
     ### LML ####
-    ## PCI ↦ scenarios of density
+    ## PCI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("LM", "L")) %>%
@@ -4294,7 +3877,7 @@ summary(mC_2_tpi_LML)
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PSPI ↦ scenarios of density
+    ## PSPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("LM", "L")) %>%
@@ -4349,7 +3932,7 @@ summary(mC_2_tpi_LML)
       theme_bw() + plt_theme_2 +
       theme(legend.position = "top", legend.direction = "horizontal"),
     
-    ## PEPI ↦ scenarios of density
+    ## PEPI > scenarios of density
     cp_df %>%
       filter(prev_M_cp_zero == 1, year %in% logistic_years, 
              income_lvl %in% c("LM", "L")) %>%
@@ -4479,9 +4062,6 @@ summary(mC_2_tpi_LML)
         mutate(set = "LM & L"),
       
     ) %>% select(set, n_countries, n_years)
-    # corresponds to infra, except for one country for H & UM
-    # perhaps this country does not have new_M_cp = 1 for any rows and is 
-    # therefore removed? 
     
     cp_df %>%
       group_by(country_iso3, year) %>%
@@ -4489,7 +4069,6 @@ summary(mC_2_tpi_LML)
              all(new_M_cp == 0)) %>%
       ungroup() %>%
       distinct(country_iso3, year)
-    # this is correct, but I don't see a country that never has 
     
     # Country for which new_M_cp is always 0
     cp_df %>%
@@ -4497,7 +4076,6 @@ summary(mC_2_tpi_LML)
       filter(all(new_M_cp == 0, na.rm = TRUE)) %>%
       ungroup() %>%
       distinct(country_iso3)
-    # GNQ --> this country is probably removed
   }
 }
 
@@ -4549,16 +4127,13 @@ summary(mC_2_tpi_LML)
       }
     )
     
-    # TODO: nyears and ncountries not correctly extracted if country*year FE 
-    # are not used... 
-    
     # ROC-AUC
     fitstat_register(
       type  = "auc",
       alias = "ROC-AUC",
       fun   = function(x){
-        resp  <- x$y                # the observed 0/1 outcome
-        preds <- fitted(x)          # the model’s fitted probabilities
+        resp  <- x$y # the observed 0/1 outcome
+        preds <- fitted(x) # the model’s fitted probabilities
         as.numeric( pROC::auc(resp, preds) )
       }
     )
@@ -4569,15 +4144,11 @@ summary(mC_2_tpi_LML)
       alias = "F$_1$",
       fun   = function(x) {
         
-        resp  <- x$y         # observed 0/1 outcome
-        probs <- fitted(x)   # predicted probabilities
+        resp  <- x$y # observed 0/1 outcome
+        probs <- fitted(x) # predicted probabilities
         
-        # ── 1. choose a threshold ────────────────────────────────────────────────
+        # Choose threshold
         thr   <- 0.1 # fixed cut-off
-        # 0.1275 for 0.03; 0.15 for 0.04; 0.1713 for 0.08
-        # thr <- pROC::coords(pROC::roc(resp, probs), "best",
-        #                     ret = "threshold", best.method = "youden")
-        # ─────────────────────────────────────────────────────────────────────────
         
         pred  <- as.integer(probs >= thr)
         
@@ -4585,8 +4156,8 @@ summary(mC_2_tpi_LML)
         FP <- sum(pred == 1 & resp == 0)
         FN <- sum(pred == 0 & resp == 1)
         
-        if (TP + FP + FN == 0) return(NaN)          # edge case
-        return( 2 * TP / (2 * TP + FP + FN) )       # F1 formula
+        if (TP + FP + FN == 0) return(NaN) # edge case
+        return( 2 * TP / (2 * TP + FP + FN) ) # F1 formula
       }
     )
   }
@@ -4658,8 +4229,7 @@ summary(mC_2_tpi_LML)
     text = as.character(modB_notorth), 
     "data/data_processed/LaTeX data values/modB_notorth.txt"
   )
-  # TODO: add one model without interactions (only direct effects)
-  
+
   ## Export coefficients ####
   ### VIFs ####
   cat(sub(
