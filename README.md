@@ -2,14 +2,14 @@
 
 ## Description 
 
-Code for replication of the article "*Economic Complexity Alignment and Sustainable Development*"
+Code for replication of the article "*[Economic Complexity Alignment and Sustainable Development](https://arxiv.org/abs/2509.17919)*".
 
 The script `complexity-alignment-replication.R` uses the processed dataset `cp_df_external.parquet`
 to replicate the full regression analysis presented in the paper. 
 
 ## Data 
 
-The processed data file `cp_df_external.parquet` is available on https://zenodo.org/records/17436171. 
+The processed data file `cp_df_external.parquet` can be downloaded from https://zenodo.org/records/17436171. 
 
 ## Citation
 

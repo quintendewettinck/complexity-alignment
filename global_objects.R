@@ -78,7 +78,6 @@ export_latex_variable <- function(variable, value, path = latex_vars_path) {
   }
 }
 
-
 # Plotting ----------------------------------------------------------------
 FONTSIZE_SMALL <- 10
 FONTSIZE_MED <- 12
